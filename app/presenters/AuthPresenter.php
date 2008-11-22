@@ -15,28 +15,35 @@ class AuthPresenter extends BasePresenter
 
 	public function presentLogin($backlink)
 	{
-		if ($this->request->isMethod('post')) {
-			// collect the data from the user
-			$username = trim($this->request->post['username']);
-			$password = trim($this->request->post['password']);
+		$form = new AppForm($this, 'form');
+		$form->addText('username', 'Username:')
+			->addRule(Form::FILLED, 'Please provide an username.');
 
-			if (empty($username)) {
-				$this->template->message = 'Please provide a username.';
-			} else {
-				try {
-					require_once 'models/Users.php';
-					$user = Environment::getUser();
-					$user->authenticate($username, $password);
-					$this->getApplication()->restoreRequest($backlink);
-					$this->redirect('Dashboard:');
+		$form->addPassword('password', 'Password:')
+			->addRule(Form::FILLED, 'Please provide a password.');
 
-				} catch (AuthenticationException $e) {
-					$this->template->message = 'Login failed.';
-				}
-			}
-		}
+		$form->addSubmit('login', 'Login');
+		$form->onSubmit[] = array($this, 'loginFormSubmitted');
 
-		$this->template->title = "Log in";
+		$form->addProtection('Please submit this form again (security token has expired).');
+
+		$this->template->form = $form;
 	}
+
+
+
+	public function loginFormSubmitted($form)
+	{
+		try {
+			$user = Environment::getUser();
+			$user->authenticate($form['username']->getValue(), $form['password']->getValue());
+			$this->getApplication()->restoreRequest($this->backlink);
+			$this->redirect('Dashboard:');
+
+		} catch (AuthenticationException $e) {
+			$form->addError($e->getMessage());
+		}
+	}
+
 
 }

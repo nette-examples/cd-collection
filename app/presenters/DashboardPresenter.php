@@ -10,11 +10,12 @@ class DashboardPresenter extends BasePresenter
 
 	protected function startup()
 	{
-		require_once 'models/Albums.php';
-
 		// user authentication
 		$user = Environment::getUser();
 		if (!$user->isAuthenticated()) {
+			if ($user->getSignOutReason() === User::INACTIVITY) {
+				$this->flashMessage('You have been logged out due to inactivity. Please login again.');
+			}
 			$backlink = $this->getApplication()->storeRequest();
 			$this->redirect('Auth:login', $backlink);
 		}
@@ -30,85 +31,62 @@ class DashboardPresenter extends BasePresenter
 
 	public function renderDefault()
 	{
-		$this->template->title = "My Albums";
-
-		$album = new Albums();
+		$album = new Albums;
 		$this->template->albums = $album->findAll('artist', 'title');
 	}
 
 
 
-	/********************* view add *********************/
+	/********************* views add & edit *********************/
 
 
 
-	public function presentAdd()
+	public function renderAdd()
 	{
-		if ($this->request->isMethod('post')) {
-			$artist = trim($this->request->post['artist']);
-			$title = trim($this->request->post['title']);
+		$form = $this->getComponent('albumForm');
+		$form['save']->caption = 'Add';
+		$this->template->form = $form;
 
-			if ($artist != '' && $title != '') {
-				$data = array(
-					'artist' => $artist,
-					'title'  => $title,
-				);
-				$album = new Albums();
-				$album->insert($data);
-
-				$this->redirect('default');
-			}
+		if (!$form->isSubmitted()) {
+			$album = new Albums;
+			$form->setDefaults($album->createBlank());
 		}
-
-		$this->template->title = "Add New Album";
-
-		// set up an "empty" album
-		$album = new Albums();
-		$this->template->album = $album->createBlank();
-
-		// additional view fields required by form
-		$this->template->action = $this->link('add');
-		$this->template->buttonText = 'Add';
 	}
 
 
 
-	/********************* view edit *********************/
-
-
-
-	public function presentEdit($id = 0)
+	public function renderEdit($id = 0)
 	{
-		if ($this->request->isMethod('post')) {
-			$artist = trim($this->request->post['artist']);
-			$title = trim($this->request->post['title']);
+		$form = $this->getComponent('albumForm');
+		$this->template->form = $form;
 
-			if ($id !== 0) {
-				if ($artist != '' && $title != '') {
-					$data = array(
-						'artist' => $artist,
-						'title'  => $title,
-					);
-					$album = new Albums();
-					$album->update($id, $data);
+		if (!$form->isSubmitted()) {
+			$album = new Albums;
+			$row = $album->fetch($id);
+			if (!$row) {
+				throw new /*Nette\Application\*/BadRequestException('Record not found');
+			}
+			$form->setDefaults($row);
+		}
+	}
 
-					$this->redirect('default');
-				}
+
+
+	public function albumFormSubmitted(AppForm $form)
+	{
+		if ($form['save']->isSubmittedBy()) {
+			$id = (int) $this->getParam('id');
+			$album = new Albums;
+			if ($id > 0) {
+				$album->update($id, $form->getValues());
+				$this->flashMessage('The album has been updated.');
+			} else {
+				$album->insert($form->getValues());
+				$this->flashMessage('The album has been added.');
 			}
 		}
 
-		$album = new Albums();
-		if ($id > 0) {
-			$this->template->album = $album->fetch($id);
-		} else {
-			$this->template->album = $album->createBlank();
-		}
-
-		$this->template->title = "Edit Album";
-
-		// additional view fields required by form
-		$this->template->buttonText = 'Update';
-		$this->template->action = $this->link('edit', $id);
+		$this->redirect('default');
 	}
 
 
@@ -117,28 +95,27 @@ class DashboardPresenter extends BasePresenter
 
 
 
-	public function presentDelete($id = 0)
+	public function renderDelete($id = 0)
 	{
-		if ($this->request->isMethod('post')) {
-			$del = $this->request->post['del'];
-			if ($del == 'Yes' && $id > 0) {
-				$album = new Albums();
-				$album->delete($id);
-			}
-			$this->redirect('default');
+		$this->template->form = $this->getComponent('deleteForm');
+		$album = new Albums;
+		$this->template->album = $album->fetch($id);
+		if (!$this->template->album) {
+			throw new /*Nette\Application\*/BadRequestException('Record not found');
+		}
+	}
+
+
+
+	public function deleteFormSubmitted(AppForm $form)
+	{
+		if ($form['delete']->isSubmittedBy()) {
+			$album = new Albums;
+			$album->delete((int) $this->getParam('id'));
+			$this->flashMessage('Album has been deleted.');
 		}
 
-		if ($id > 0) {
-			// only render if we have an id and can find the album.
-			$album = new Albums();
-			$this->template->album = $album->fetch($id);
-			if (!$this->template->album) {
-				$this->redirect('default');
-			}
-		}
-
-		$this->template->title = "Delete Album";
-		$this->template->action = $this->link('delete', $id);
+		$this->redirect('default');
 	}
 
 
@@ -150,7 +127,52 @@ class DashboardPresenter extends BasePresenter
 	public function presentLogout()
 	{
 		Environment::getUser()->signOut();
-		$this->redirect('default');
+		$this->flashMessage('You have been logged off.');
+		$this->redirect('Auth:login');
+	}
+
+
+
+	/********************* facilities *********************/
+
+
+
+	/**
+	 * Component factory.
+	 * @param  string  component name
+	 * @return void
+	 */
+	protected function createComponent($name)
+	{
+		switch ($name) {
+		case 'albumForm':
+			$id = $this->getParam('id');
+			$form = new AppForm($this, $name);
+			$form->addText('artist', 'Artist:')
+				->addRule(Form::FILLED, 'Please enter an artist.');
+
+			$form->addText('title', 'Title:')
+				->addRule(Form::FILLED, 'Please enter a title.');
+
+			$form->addSubmit('save', 'Save')->getControlPrototype()->class('default');
+			$form->addSubmit('cancel', 'Cancel')->setValidationScope(NULL);
+			$form->onSubmit[] = array($this, 'albumFormSubmitted');
+
+			$form->addProtection('Please submit this form again (security token has expired).');
+			return;
+
+		case 'deleteForm':
+			$form = new AppForm($this, $name);
+			$form->addSubmit('cancel', 'Cancel');
+			$form->addSubmit('delete', 'Delete')->getControlPrototype()->class('default');
+			$form->onSubmit[] = array($this, 'deleteFormSubmitted');
+
+			$form->addProtection('Please submit this form again (security token has expired).');
+			return;
+
+		default:
+			parent::createComponent($name);
+		}
 	}
 
 }
