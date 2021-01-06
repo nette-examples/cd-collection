@@ -11,18 +11,18 @@ use Nette\Security;
 /**
  * Users authenticator.
  */
-class Authenticator implements Security\IAuthenticator
+class Authenticator implements Security\Authenticator
 {
 	use Nette\SmartObject;
 
-	/** @var Nette\Database\Context */
+	/** @var Nette\Database\Explorer */
 	private $database;
 
 	/** @var Security\Passwords */
 	private $passwords;
 
 
-	public function __construct(Nette\Database\Context $database, Security\Passwords $passwords)
+	public function __construct(Nette\Database\Explorer $database, Security\Passwords $passwords)
 	{
 		$this->database = $database;
 		$this->passwords = $passwords;
@@ -33,9 +33,8 @@ class Authenticator implements Security\IAuthenticator
 	 * Performs an authentication.
 	 * @throws Nette\Security\AuthenticationException
 	 */
-	public function authenticate(array $credentials): Security\IIdentity
+	public function authenticate(string $username, string $password): Security\SimpleIdentity
 	{
-		[$username, $password] = $credentials;
 		$row = $this->database->table('users')->where('username', $username)->fetch();
 
 		if (!$row) {
@@ -47,6 +46,6 @@ class Authenticator implements Security\IAuthenticator
 
 		$arr = $row->toArray();
 		unset($arr['password']);
-		return new Security\Identity($row->id, null, $arr);
+		return new Security\SimpleIdentity($row->id, null, $arr);
 	}
 }
