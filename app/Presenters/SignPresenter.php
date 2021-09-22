@@ -8,7 +8,7 @@ use Nette;
 use Nette\Application\UI;
 
 
-class SignPresenter extends Nette\Application\UI\Presenter
+final class SignPresenter extends Nette\Application\UI\Presenter
 {
 	/** @persistent */
 	public $backlink = '';

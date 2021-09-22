@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Router;
 
 use Nette;
-use Nette\Routing\Router;
 use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;
 use Nette\Application\Routers\SimpleRouter;
+use Nette\Routing\Router;
 
 
 final class RouterFactory

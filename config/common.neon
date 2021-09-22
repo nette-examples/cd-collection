@@ -15,4 +15,4 @@ database:
 services:
 	- App\Model\Authenticator
 	- App\Model\AlbumRepository
-	router: App\Router\RouterFactory::createRouter
+	- App\Router\RouterFactory::createRouter
