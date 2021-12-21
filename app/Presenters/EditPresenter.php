@@ -64,14 +64,14 @@ final class EditPresenter extends Nette\Application\UI\Presenter
 	}
 
 
-	public function albumFormSucceeded(array $values): void
+	public function albumFormSucceeded(array $data): void
 	{
 		$id = (int) $this->getParameter('id');
 		if ($id) {
-			$this->albums->findById($id)->update($values);
+			$this->albums->findById($id)->update($data);
 			$this->flashMessage('The album has been updated.');
 		} else {
-			$this->albums->insert($values);
+			$this->albums->insert($data);
 			$this->flashMessage('The album has been added.');
 		}
 		$this->redirect('Dashboard:');
