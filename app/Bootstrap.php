@@ -18,11 +18,7 @@ class Bootstrap
 		//$configurator->setDebugMode('secret@23.75.345.200'); // enable for your remote IP
 		$configurator->enableTracy($appDir . '/log');
 
-		// Enable RobotLoader - this will load all classes automatically
 		$configurator->setTempDirectory($appDir . '/temp');
-		$configurator->createRobotLoader()
-			->addDirectory(__DIR__)
-			->register();
 
 		// Create Dependency Injection container from config.neon file
 		$configurator->addConfig($appDir . '/config/common.neon');
