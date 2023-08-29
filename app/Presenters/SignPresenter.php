@@ -10,8 +10,8 @@ use Nette\Application\UI;
 
 final class SignPresenter extends Nette\Application\UI\Presenter
 {
-	/** @persistent */
-	public $backlink = '';
+	#[Nette\Application\Attributes\Persistent]
+	public string $backlink = '';
 
 
 	/**
@@ -28,12 +28,12 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 
 		$form->addSubmit('send', 'Sign in');
 
-		$form->onSuccess[] = [$this, 'signInFormSucceeded'];
+		$form->onSuccess[] = $this->signInFormSucceeded(...);
 		return $form;
 	}
 
 
-	public function signInFormSucceeded(UI\Form $form, \stdClass $data): void
+	private function signInFormSucceeded(UI\Form $form, \stdClass $data): void
 	{
 		try {
 			$this->getUser()->login($data->username, $data->password);

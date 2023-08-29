@@ -9,11 +9,11 @@ trait RequireLoggedUser
 {
 	public function injectRequireLoggedUser()
 	{
-		$this->onStartup[] = [$this, 'requireLoggedUser'];
+		$this->onStartup[] = $this->requireLoggedUser(...);
 	}
 
 
-	public function requireLoggedUser()
+	private function requireLoggedUser()
 	{
 		$user = $this->getUser();
 		if (!$user->isLoggedIn()) {

@@ -12,13 +12,9 @@ final class DashboardPresenter extends Nette\Application\UI\Presenter
 {
 	use RequireLoggedUser;
 
-	/** @var Model\AlbumRepository */
-	private $albums;
-
-
-	public function __construct(Model\AlbumRepository $albums)
-	{
-		$this->albums = $albums;
+	public function __construct(
+		private Model\AlbumRepository $albums,
+	) {
 	}
 
 

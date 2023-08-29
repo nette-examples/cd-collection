@@ -13,17 +13,10 @@ use Nette\Security;
  */
 class Authenticator implements Security\Authenticator
 {
-	/** @var Nette\Database\Explorer */
-	private $database;
-
-	/** @var Security\Passwords */
-	private $passwords;
-
-
-	public function __construct(Nette\Database\Explorer $database, Security\Passwords $passwords)
-	{
-		$this->database = $database;
-		$this->passwords = $passwords;
+	public function __construct(
+		private Nette\Database\Explorer $database,
+		private Security\Passwords $passwords,
+	) {
 	}
 
 

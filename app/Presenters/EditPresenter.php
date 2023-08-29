@@ -13,13 +13,9 @@ final class EditPresenter extends Nette\Application\UI\Presenter
 {
 	use RequireLoggedUser;
 
-	/** @var Model\AlbumRepository */
-	private $albums;
-
-
-	public function __construct(Model\AlbumRepository $albums)
-	{
-		$this->albums = $albums;
+	public function __construct(
+		private Model\AlbumRepository $albums,
+	) {
 	}
 
 
@@ -54,17 +50,17 @@ final class EditPresenter extends Nette\Application\UI\Presenter
 
 		$form->addSubmit('save', 'Save')
 			->setHtmlAttribute('class', 'default')
-			->onClick[] = [$this, 'albumFormSucceeded'];
+			->onClick[] = $this->albumFormSucceeded(...);
 
 		$form->addSubmit('cancel', 'Cancel')
 			->setValidationScope([])
-			->onClick[] = [$this, 'formCancelled'];
+			->onClick[] = $this->formCancelled(...);
 
 		return $form;
 	}
 
 
-	public function albumFormSucceeded(array $data): void
+	private function albumFormSucceeded(array $data): void
 	{
 		$id = (int) $this->getParameter('id');
 		if ($id) {
@@ -78,7 +74,7 @@ final class EditPresenter extends Nette\Application\UI\Presenter
 	}
 
 
-	public function formCancelled(): void
+	private function formCancelled(): void
 	{
 		$this->redirect('Dashboard:');
 	}

@@ -9,13 +9,9 @@ use Nette;
 
 class AlbumRepository
 {
-	/** @var Nette\Database\Context */
-	private $database;
-
-
-	public function __construct(Nette\Database\Context $database)
-	{
-		$this->database = $database;
+	public function __construct(
+		private Nette\Database\Explorer $database,
+	) {
 	}
 
 

@@ -13,13 +13,9 @@ final class DeletePresenter extends Nette\Application\UI\Presenter
 {
 	use RequireLoggedUser;
 
-	/** @var Model\AlbumRepository */
-	private $albums;
-
-
-	public function __construct(Model\AlbumRepository $albums)
-	{
-		$this->albums = $albums;
+	public function __construct(
+		private Model\AlbumRepository $albums,
+	) {
 	}
 
 
@@ -36,17 +32,17 @@ final class DeletePresenter extends Nette\Application\UI\Presenter
 	{
 		$form = new Form;
 		$form->addSubmit('cancel', 'Cancel')
-			->onClick[] = [$this, 'formCancelled'];
+			->onClick[] = $this->formCancelled(...);
 
 		$form->addSubmit('delete', 'Delete')
 			->setHtmlAttribute('class', 'default')
-			->onClick[] = [$this, 'deleteFormSucceeded'];
+			->onClick[] = $this->deleteFormSucceeded(...);
 
 		return $form;
 	}
 
 
-	public function deleteFormSucceeded(): void
+	private function deleteFormSucceeded(): void
 	{
 		$id = (int) $this->getParameter('id');
 		$this->albums->findById($id)
@@ -56,7 +52,7 @@ final class DeletePresenter extends Nette\Application\UI\Presenter
 	}
 
 
-	public function formCancelled(): void
+	private function formCancelled(): void
 	{
 		$this->redirect('Dashboard:');
 	}
