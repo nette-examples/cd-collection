@@ -9,8 +9,6 @@ use Nette;
 
 class AlbumRepository
 {
-	use Nette\SmartObject;
-
 	/** @var Nette\Database\Context */
 	private $database;
 

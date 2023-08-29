@@ -13,8 +13,6 @@ use Nette\Security;
  */
 class Authenticator implements Security\Authenticator
 {
-	use Nette\SmartObject;
-
 	/** @var Nette\Database\Explorer */
 	private $database;
 
