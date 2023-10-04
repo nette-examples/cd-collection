@@ -1,27 +1,21 @@
 CD collection (Nette Framework example)
----------------------------------------
+=======================================
 
-Classic Zend Framework [Tutorial](http://akrabat.com/zend-framework-tutorial)
-rewritten for Nette Framework.
+This project is a reinterpretation of the classic [Zend Framework Tutorial](http://akrabat.com/zend-framework-tutorial) but for the Nette Framework.
 
-The example shows an important feature of the Nette Framework: the URLs are
-not used inside the application including the templates. The URLs are in
-responsibility of the router and can be changed anytime. The target of a link
-is always a combination "Presenter:action" or "Presenter:signal!".
+The example illustrates a notable feature of the Nette Framework: URLs are not directly referenced within the application, including templates. The router manages URLs, allowing for their modification at any time. Links always target a combination of "Presenter:action" or "Presenter:signal!".
 
 
 What is [Nette Framework](https://nette.org)?
---------------------------------------------
+============================================
 
-Nette Framework is a popular tool for PHP web development. It is designed to be
-the most usable and friendliest as possible. It focuses on security and
-performance and is definitely one of the safest PHP frameworks.
-
-Nette Framework speaks your language and helps you to easily build better websites.
+Nette Framework is a distinguished tool tailored for PHP web development. Designed with an emphasis on usability, it also prioritizes security and performance, making it one of the safest PHP frameworks out there. It provides an intuitive experience, assisting developers in creating top-notch websites.
 
 
-Installation
-------------
+Getting Started
+===============
+
+Follow these steps to set up the example:
 
 ```shell
 git clone https://github.com/nette-examples/cd-collection
@@ -29,12 +23,10 @@ cd cd-collection
 composer install
 ```
 
-The simplest way to get started is to start the built-in PHP server in the root directory of your project:
+For a quick start, launch the built-in PHP server in the root directory:
 
 ```shell
 php -S localhost:8000 -t www
 ```
 
-Then visit `http://localhost:8000` in your browser to see the welcome page.
-
-It requires PHP version 7.2 or newer.
+Now, navigate to `http://localhost:8000` in your browser to see the welcome page.
