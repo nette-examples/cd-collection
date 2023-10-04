@@ -1,16 +1,15 @@
 {**
- * Layout of Nette Framework example CD collection
- *
- * @param string   $robots   tell robots how to index the content of a page (optional)
- * @param string   $basePath web base path
- * @param array    $flashes  flash messages
- * @param Nette\Web\User $user  current user
+ * The main layout for the application, which serves as a wrapper
+ * for individual views. This layout contains common elements such as
+ * the header, footer, and any other shared components.
  *}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
+
+	{* Conditional metadata for robots, only if set. *}
 	<meta n:ifset="$robots" name="robots" content="{$robots}">
 
 	<title>{block title|stripHtml|trim}{/block} | Nette example</title>
@@ -19,14 +18,17 @@
 </head>
 
 <body>
+	{* Display any flash messages to the user. *}
 	<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
 
+	{* Main content area; content from individual views will be injected here. *}
 	<div id="content">
 		{include content}
 	</div>
 
 	<p id="logged-in" n:if="$user->loggedIn">Signed in as {$user->identity->realname}. <a n:href="Sign:out">Sign out</a></p>
 
+	{* Include Nette's form scripts. *}
 	<script src="https://nette.github.io/resources/js/3/netteForms.min.js"></script>
 </body>
 </html>

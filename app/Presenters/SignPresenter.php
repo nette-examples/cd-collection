@@ -8,6 +8,9 @@ use Nette;
 use Nette\Application\UI;
 
 
+/**
+ * Handles user sign-in and sign-out operations.
+ */
 final class SignPresenter extends Nette\Application\UI\Presenter
 {
 	#[Nette\Application\Attributes\Persistent]
@@ -15,7 +18,7 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 
 
 	/**
-	 * Sign-in form factory.
+	 * Creates the sign-in form.
 	 */
 	protected function createComponentSignInForm(): UI\Form
 	{
@@ -33,6 +36,9 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 	}
 
 
+	/**
+	 * Validates the user credentials and logs them in if successful.
+	 */
 	private function signInFormSucceeded(UI\Form $form, \stdClass $data): void
 	{
 		try {
@@ -48,6 +54,9 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 	}
 
 
+	/**
+	 * Logs the user out and redirects to the sign-in page.
+	 */
 	public function actionOut(): void
 	{
 		$this->getUser()->logout();

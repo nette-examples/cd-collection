@@ -2,10 +2,12 @@
 
 <h1 n:block="title">Delete Album</h1>
 
+{* If the album is found, display its details and the deletion confirmation form. *}
 {if $album}
 	<p>Are you sure that you want to delete ‘{$album->title}’ by ‘{$album->artist}’?</p>
 	{control deleteForm}
 
+{* If the album isn't found, display an error message. *}
 {else}
 	<p>Cannot find album.</p>
 {/if}

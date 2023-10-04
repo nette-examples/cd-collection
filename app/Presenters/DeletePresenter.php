@@ -8,17 +8,23 @@ use App\Model;
 use Nette;
 use Nette\Application\UI\Form;
 
-
+/**
+ * Handles the deletion of albums.
+ */
 final class DeletePresenter extends Nette\Application\UI\Presenter
 {
 	use RequireLoggedUser;
 
+	// Dependency injection of the album repository.
 	public function __construct(
 		private Model\AlbumRepository $albums,
 	) {
 	}
 
 
+	/**
+	 * Display the delete confirmation page for a specific album.
+	 */
 	public function renderDefault(int $id): void
 	{
 		$this->template->album = $this->albums->findById($id);
@@ -28,6 +34,9 @@ final class DeletePresenter extends Nette\Application\UI\Presenter
 	}
 
 
+	/**
+	 * Form for confirming album deletion.
+	 */
 	protected function createComponentDeleteForm(): Form
 	{
 		$form = new Form;
@@ -42,6 +51,9 @@ final class DeletePresenter extends Nette\Application\UI\Presenter
 	}
 
 
+	/**
+	 * Executes album deletion upon form submission.
+	 */
 	private function deleteFormSucceeded(): void
 	{
 		$id = (int) $this->getParameter('id');
@@ -52,6 +64,9 @@ final class DeletePresenter extends Nette\Application\UI\Presenter
 	}
 
 
+	/**
+	 * Redirects to the dashboard if the deletion is cancelled.
+	 */
 	private function formCancelled(): void
 	{
 		$this->redirect('Dashboard:');

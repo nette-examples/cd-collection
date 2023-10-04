@@ -1,9 +1,11 @@
+{* A directive to tell robots not to index this page. *}
 {var $robots = noindex}
 
 {block content}
 
 <h1 n:block="title">Sign in</h1>
 
+{* Display the sign-in form. *}
 {control signInForm}
 
 <p>Default username is <i>demo</i>, with password <i>xxx</i></p>

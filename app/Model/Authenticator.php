@@ -9,10 +9,11 @@ use Nette\Security;
 
 
 /**
- * Users authenticator.
+ * Handles user authentication against the database.
  */
 class Authenticator implements Security\Authenticator
 {
+	// Dependency injection of the Nette database explorer and password utility.
 	public function __construct(
 		private Nette\Database\Explorer $database,
 		private Security\Passwords $passwords,
@@ -21,8 +22,8 @@ class Authenticator implements Security\Authenticator
 
 
 	/**
-	 * Performs an authentication.
-	 * @throws Nette\Security\AuthenticationException
+	 * Validates the provided username and password.
+	 * Throws exceptions for invalid credentials.
 	 */
 	public function authenticate(string $username, string $password): Security\SimpleIdentity
 	{

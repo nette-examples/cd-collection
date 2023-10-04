@@ -8,17 +8,23 @@ use App\Model;
 use Nette;
 use Nette\Application\UI\Form;
 
-
+/**
+ * Handles both the addition of new albums and editing existing ones.
+ */
 final class EditPresenter extends Nette\Application\UI\Presenter
 {
 	use RequireLoggedUser;
 
+	// Dependency injection of the album repository.
 	public function __construct(
 		private Model\AlbumRepository $albums,
 	) {
 	}
 
 
+	/**
+	 * Prepares the form for adding a new album.
+	 */
 	public function renderAdd(): void
 	{
 		$form = $this->getComponent('albumForm');
@@ -26,6 +32,9 @@ final class EditPresenter extends Nette\Application\UI\Presenter
 	}
 
 
+	/**
+	 * Prepares the form for editing an existing album.
+	 */
 	public function renderEdit(int $id): void
 	{
 		$form = $this->getComponent('albumForm');
@@ -39,6 +48,9 @@ final class EditPresenter extends Nette\Application\UI\Presenter
 	}
 
 
+	/**
+	 * Constructs the form used for adding/editing albums.
+	 */
 	protected function createComponentAlbumForm(): Form
 	{
 		$form = new Form;
@@ -60,6 +72,9 @@ final class EditPresenter extends Nette\Application\UI\Presenter
 	}
 
 
+	/**
+	 * Handles form submission for album addition/editing.
+	 */
 	private function albumFormSucceeded(array $data): void
 	{
 		$id = (int) $this->getParameter('id');
@@ -74,6 +89,9 @@ final class EditPresenter extends Nette\Application\UI\Presenter
 	}
 
 
+	/**
+	 * Redirects to the dashboard if the addition/editing is cancelled.
+	 */
 	private function formCancelled(): void
 	{
 		$this->redirect('Dashboard:');

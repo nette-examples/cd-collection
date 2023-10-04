@@ -5,15 +5,22 @@ declare(strict_types=1);
 namespace App\Presenters;
 
 
+/**
+ * Ensures the user is logged in to access certain pages.
+ */
 trait RequireLoggedUser
 {
+	// Registers the requirement for a logged user on startup.
 	public function injectRequireLoggedUser()
 	{
 		$this->onStartup[] = $this->requireLoggedUser(...);
 	}
 
 
-	private function requireLoggedUser()
+	/**
+	 * Redirects to the sign-in page if the user is not logged in.
+	 */
+	private function requireLoggedUser(): void
 	{
 		$user = $this->getUser();
 		if (!$user->isLoggedIn()) {
