@@ -29,6 +29,6 @@
 	<p id="logged-in" n:if="$user->loggedIn">Signed in as {$user->identity->realname}. <a n:href="Sign:out">Sign out</a></p>
 
 	{* Include Nette's form scripts. *}
-	<script src="https://nette.github.io/resources/js/3/netteForms.min.js"></script>
+	<script src="https://unpkg.com/nette-forms@3/src/assets/netteForms.js"></script>
 </body>
 </html>
