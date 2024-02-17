@@ -24,7 +24,7 @@ trait RequireLoggedUser
 	{
 		$user = $this->getUser();
 		if (!$user->isLoggedIn()) {
-			if ($user->getLogoutReason() === $user::LOGOUT_INACTIVITY) {
+			if ($user->getLogoutReason() === $user::LogoutInactivity) {
 				$this->flashMessage('You have been signed out due to inactivity. Please sign in again.');
 			}
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);

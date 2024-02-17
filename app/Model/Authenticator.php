@@ -30,10 +30,10 @@ class Authenticator implements Security\Authenticator
 		$row = $this->database->table('users')->where('username', $username)->fetch();
 
 		if (!$row) {
-			throw new Security\AuthenticationException('The username is incorrect.', self::IDENTITY_NOT_FOUND);
+			throw new Security\AuthenticationException('The username is incorrect.', self::IdentityNotFound);
 
 		} elseif (!$this->passwords->verify($password, $row->password)) {
-			throw new Security\AuthenticationException('The password is incorrect.', self::INVALID_CREDENTIAL);
+			throw new Security\AuthenticationException('The password is incorrect.', self::InvalidCredential);
 		}
 
 		$arr = $row->toArray();
