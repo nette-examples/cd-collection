@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Presenters;
+namespace App\UI\Edit;
 
 use App\Model;
+use App\UI\Accessory\RequireLoggedUser;
 use Nette;
 use Nette\Application\UI\Form;
 
