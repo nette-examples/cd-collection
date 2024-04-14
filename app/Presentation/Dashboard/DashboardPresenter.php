@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Presenters;
+namespace App\Presentation\Dashboard;
 
 use App\Model;
+use App\Presentation\Accessory\RequireLoggedUser;
 use Nette;
 
 /**

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Presenters;
+namespace App\Presentation\Sign;
 
 use Nette;
 use Nette\Application\UI;

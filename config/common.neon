@@ -2,16 +2,15 @@
 
 application:
 	# Presenter mapping pattern
-	mapping:
-		*: App\*Module\Presenters\*Presenter
+	mapping: App\Presentation\*\**Presenter
 
 
 database:
-	dsn: "sqlite:%appDir%/Model/demo.db3"
+	dsn: "sqlite:%appDir%/../data/demo.sqlite"
 
 
 # Service registrations. See https://doc.nette.org/dependency-injection/services
 services:
 	- App\Model\Authenticator
 	- App\Model\AlbumRepository
-	- App\Router\RouterFactory::createRouter
+	- App\Core\RouterFactory::createRouter
