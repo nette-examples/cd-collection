@@ -6,7 +6,7 @@ application:
 
 
 database:
-	dsn: "sqlite:%appDir%/../data/demo.sqlite"
+	dsn: "sqlite:%rootDir%/data/demo.sqlite"
 
 
 # Service registrations. See https://doc.nette.org/dependency-injection/services
