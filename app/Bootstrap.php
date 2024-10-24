@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
+use Nette;
 use Nette\Bootstrap\Configurator;
 
 /**
@@ -11,23 +12,40 @@ use Nette\Bootstrap\Configurator;
  */
 class Bootstrap
 {
-	public static function boot(): Configurator
-	{
-		$configurator = new Configurator;
-		$appDir = dirname(__DIR__);
+	private Configurator $configurator;
+	private string $rootDir;
 
+
+	public function __construct()
+	{
+		$this->rootDir = dirname(__DIR__);
+		$this->configurator = new Configurator;
+		// Set the temp directory for the application
+		$this->configurator->setTempDirectory($this->rootDir . '/temp');
+	}
+
+
+	public function bootWebApplication(): Nette\DI\Container
+	{
+		$this->initializeEnvironment();
+		$this->setupContainer();
+		return $this->configurator->createContainer();
+	}
+
+
+	public function initializeEnvironment(): void
+	{
 		// Uncomment the next line to enable debug mode for a specific IP
-		//$configurator->setDebugMode('secret@23.75.345.200');
+		// $this->configurator->setDebugMode('secret@23.75.345.200');
 
 		// Enable Tracy debugger and set its log directory
-		$configurator->enableTracy($appDir . '/log');
+		$this->configurator->enableTracy($this->rootDir . '/log');
+	}
 
-		// Set the temp directory for the application
-		$configurator->setTempDirectory($appDir . '/temp');
 
+	private function setupContainer(): void
+	{
 		// Add configuration files
-		$configurator->addConfig($appDir . '/config/common.neon');
-
-		return $configurator;
+		$this->configurator->addConfig($this->rootDir . '/config/common.neon');
 	}
 }

@@ -7,7 +7,7 @@ if (@!include __DIR__ . '/../vendor/autoload.php') {
 }
 
 // Boot the application, create a container, and run the application.
-$configurator = App\Bootstrap::boot();
-$container = $configurator->createContainer();
+$bootstrap = new App\Bootstrap;
+$container = $bootstrap->bootWebApplication();
 $application = $container->getByType(Nette\Application\Application::class);
 $application->run();
