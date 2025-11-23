@@ -1,5 +1,5 @@
-CD collection (Nette Framework example)
-=======================================
+CD collection [DISCONTINUED]
+============================
 
 This project is a reinterpretation of the classic [Zend Framework Tutorial](http://akrabat.com/zend-framework-tutorial) but for the Nette Framework.
 
